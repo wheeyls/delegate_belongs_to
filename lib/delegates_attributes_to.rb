@@ -62,7 +62,9 @@ module DelegatesAttributesTo
           send(association).send("#{attribute}=", value)
         end
         
-        ActiveRecord::Dirty::DIRTY_SUFFIXES.each do |suffix|
+        dirty_suffixes=['_changed?', '_change', '_will_change!', '_was']
+
+        dirty_suffixes.each do |suffix|
           define_method("#{attribute}#{suffix}") do
             send("build_#{association}") unless send(association)
             send(association).send("#{attribute}#{suffix}")
